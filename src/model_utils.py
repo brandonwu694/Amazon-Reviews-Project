@@ -14,7 +14,19 @@ from sklearn.model_selection import train_test_split
 
 def drop_non_feature_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Drop columns that are not used as model features."""
-    df = df.drop(columns=["review_date", "date_of_experience", "country", "country_grouped", "review_title", "review_text", "full_text", "review_count"])
+    df = df.drop(
+        columns=[
+            "review_date",
+            "date_of_experience",
+            "country",
+            "country_grouped",
+            "review_title",
+            "review_text",
+            "full_text",
+            "review_count",
+        ],
+        errors="ignore",
+    )
     return df
 
 
@@ -56,7 +68,11 @@ def split_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFra
     return train_df, val_df, test_df
 
 
-def train_tf_idf_model(train_df: pd.DataFrame, estimator: BaseEstimator | None = None) -> Pipeline:
+def train_tf_idf_model(
+    train_df: pd.DataFrame,
+    estimator: BaseEstimator | None = None,
+    vectorizer: TfidfVectorizer | None = None,
+) -> Pipeline:
     """Train a TF-IDF plus structured-feature classification pipeline."""
     required_columns = {"rating", "tfidf_text", "log_review_count", "text_length"}
     missing_columns = required_columns.difference(train_df.columns)
@@ -70,23 +86,30 @@ def train_tf_idf_model(train_df: pd.DataFrame, estimator: BaseEstimator | None =
     numeric_features = ["log_review_count", "text_length"]
     country_features = [col for col in modeling_df.columns if col.startswith("country_")]
 
+    y_tr = modeling_df["rating"]
+    X_tr = modeling_df.drop(columns=["rating"])
+
+    if estimator is None:
+        estimator = LogisticRegression(max_iter=1000, class_weight="balanced")
+    if vectorizer is None:
+        vectorizer = TfidfVectorizer(
+            stop_words="english",
+            ngram_range=(1, 2),
+            min_df=5,
+            max_features=10000,
+        )
+
     preprocessor = ColumnTransformer(
         transformers=[
             (
                 "text",
-                TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=5, max_features=10000),
+                vectorizer,
                 text_feature,
             ),
             ("num", StandardScaler(), numeric_features),
             ("country", "passthrough", country_features),
         ]
     )
-
-    y_tr = modeling_df["rating"]
-    X_tr = modeling_df.drop(columns=["rating"])
-
-    if estimator is None:
-        estimator = LogisticRegression(max_iter=1000, class_weight="balanced")
 
     baseline_model = Pipeline(
         steps=[
