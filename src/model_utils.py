@@ -15,6 +15,22 @@ def drop_non_feature_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def classify_rating(rating: int) -> int:
+    """Classify 1-2 star ratings as poor (0) and 4-5 star ratings as good (1)"""
+    if rating > 5 or rating < 1:
+        raise ValueError("Rating must be between 1-5")
+    if rating == 4 or rating == 5:
+        return 1
+    return 0
+
+
+def drop_neutral_ratings(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop neutral (3-star) ratings"""
+    if "rating" not in df.columns:
+        raise ValueError("DataFrame must contain a 'rating' column.")
+    return df[df["rating"] != 3]
+
+
 def train_tf_idf_model(train_df: pd.DataFrame, estimator: BaseEstimator | None = None) -> Pipeline:
     """Train a TF-IDF plus structured-feature classification pipeline."""
     required_columns = {"rating", "tfidf_text", "log_review_count", "text_length"}
