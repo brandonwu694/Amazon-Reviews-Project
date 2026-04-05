@@ -65,3 +65,15 @@ To save the tuned model to a custom path:
 ```bash
 amazon/bin/python src/train_binary_tuned.py --save-model --model-path models/custom_binary_tuned.joblib
 ```
+
+## Tuned LR Shortcomings
+
+The tuned binary logistic regression model is strong, but notebook `08_error_analysis.ipynb` shows a few clear limitations:
+
+- It still makes a non-trivial number of high-confidence mistakes, which suggests some errors are model limitations rather than simple threshold issues.
+- It struggles with mixed-sentiment reviews where positive and negative language appear in the same example.
+- It misses contextual cues such as contrast and negation, for example reviews that begin positively and then describe a bad experience.
+- Some longer reviews still show weaker class balance performance than the aggregate metrics suggest.
+- Some rows contain weak text such as `Review text not found`, which limits what any text model can learn from that input.
+
+These findings make a lightweight transformer comparison defensible, especially `DistilBERT`, since the remaining errors appear to be driven more by context and phrasing than by simple keyword presence.
