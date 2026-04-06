@@ -1,5 +1,15 @@
 # Amazon Reviews Project
 
+## Problem Formulation
+
+The initial goal of this project was to predict Amazon product ratings (1–5 stars) using both user metadata (e.g., `review_count`, `country`) and textual review content. However, exploratory data analysis revealed a highly imbalanced label distribution: 1-star reviews accounted for approximately 61% of the dataset, while 3-star reviews represented only about 4%.
+
+A baseline logistic regression model trained on the 5-class task achieved moderate performance, with an overall accuracy of approximately `0.70` but a much lower macro F1 score of `0.45`. This discrepancy indicated that the model performed unevenly across classes, particularly struggling to distinguish underrepresented and intermediate ratings such as 3-star reviews.
+
+Given that the model more reliably captured extreme sentiment (e.g., clearly positive or negative reviews) than nuanced middle ratings, the problem was reformulated as a binary classification task. Ratings of 1–2 were grouped as poor, and ratings of 4–5 as good, with 3-star reviews excluded due to their ambiguity and low representation.
+
+This reformulation significantly improved model performance, resulting in a more stable and reliable baseline.
+
 ## Run the Binary Baseline Pipeline
 
 Run the training pipeline from the repository root:
