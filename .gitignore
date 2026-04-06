@@ -4,6 +4,10 @@
 data/*
 !data/.gitkeep
 
+# Omit distilbert model artifacts
+models/distilbert_binary_classifier/
+models/distilbert_results/
+
 dst-env/
 .cache/v/cache/lastfailed
 tests/.cache/v/cache/lastfailed
