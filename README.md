@@ -66,9 +66,11 @@ Based on these findings, the problem was reformulated as a binary classification
 
 ### Ternary Classifier Confusion Matrix
 
-[[2774   50   45]
- [  83   37   57]
- [  41   39 1080]]
+| Actual \ Predicted | 0 (Poor) | 1 (Neutral) | 2 (Good) |
+| ------------------ | -------- | ----------- | -------- |
+| **0 (Poor)**       | 2774     | 50          | 45       |
+| **1 (Neutral)**    | 83       | 37          | 57       |
+| **2 (Good)**       | 41       | 39          | 1080     |
 
 ## Run the Binary Baseline Pipeline
 
