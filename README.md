@@ -10,6 +10,39 @@ Given that the model more reliably captured extreme sentiment (e.g., clearly pos
 
 This reformulation significantly improved model performance, resulting in a more stable and reliable baseline.
 
+## Data Access
+
+The raw dataset is not stored in this repository. Download `Amazon_Reviews.csv` [here](https://www.kaggle.com/datasets/dongrelaxman/amazon-reviews-dataset?resource=download) and place it in:
+
+`data/raw/Amazon_Reviews.csv`
+
+After downloading the raw data, run the data preparation notebooks/scripts in order to reproduce the processed datasets used by the modeling pipelines.
+
+`data/` directory structure: 
+
+```text
+data/
+├── raw/
+│   └── Amazon_Reviews.csv
+├── processed/
+│   ├── amazon_reviews_clean.parquet
+│   └── amazon_reviews_features.parquet
+└── bert/
+    └── amazon_reviews_bert.parquet
+```
+
+## Tuned LR Shortcomings
+
+The tuned binary logistic regression model is strong, but notebook `08_error_analysis.ipynb` shows a few clear limitations:
+
+- It still makes a non-trivial number of high-confidence mistakes, which suggests some errors are model limitations rather than simple threshold issues.
+- It struggles with mixed-sentiment reviews where positive and negative language appear in the same example.
+- It misses contextual cues such as contrast and negation, for example reviews that begin positively and then describe a bad experience.
+- Some longer reviews still show weaker class balance performance than the aggregate metrics suggest.
+- Some rows contain weak text such as `Review text not found`, which limits what any text model can learn from that input.
+
+These findings make a lightweight transformer comparison defensible, especially `DistilBERT`, since the remaining errors appear to be driven more by context and phrasing than by simple keyword presence.
+
 ## Run the Binary Baseline Pipeline
 
 Run the training pipeline from the repository root:
@@ -76,14 +109,35 @@ To save the tuned model to a custom path:
 amazon/bin/python src/train_binary_tuned.py --save-model --model-path models/custom_binary_tuned.joblib
 ```
 
-## Tuned LR Shortcomings
+## Run the DistilBERT Pipeline
 
-The tuned binary logistic regression model is strong, but notebook `08_error_analysis.ipynb` shows a few clear limitations:
+Run the DistilBERT training pipeline from the repository root:
 
-- It still makes a non-trivial number of high-confidence mistakes, which suggests some errors are model limitations rather than simple threshold issues.
-- It struggles with mixed-sentiment reviews where positive and negative language appear in the same example.
-- It misses contextual cues such as contrast and negation, for example reviews that begin positively and then describe a bad experience.
-- Some longer reviews still show weaker class balance performance than the aggregate metrics suggest.
-- Some rows contain weak text such as `Review text not found`, which limits what any text model can learn from that input.
+```bash
+amazon/bin/python src/train_distil_bert.py
+```
 
-These findings make a lightweight transformer comparison defensible, especially `DistilBERT`, since the remaining errors appear to be driven more by context and phrasing than by simple keyword presence.
+This will:
+- load the BERT-ready binary review dataset
+- split the data into training, validation, and test folds
+- tokenize review text with `distilbert-base-uncased`
+- fine-tune a DistilBERT binary classifier
+- print validation and test metrics to the CLI
+
+To train the model and save the final model and tokenizer:
+
+```bash
+amazon/bin/python src/train_distil_bert.py --save-model
+```
+
+By default, the saved DistilBERT artifacts are written to:
+
+```text
+models/distilbert_binary_classifier/
+```
+
+Training checkpoints are written to:
+
+```text
+models/distilbert_results/
+```
