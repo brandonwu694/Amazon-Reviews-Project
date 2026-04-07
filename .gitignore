@@ -7,6 +7,8 @@ data/*
 # Omit distilbert model artifacts
 models/distilbert_binary_classifier/
 models/distilbert_results/
+models/distilbert_ternary_classifier/
+models/distilbert_ternary_results/
 
 dst-env/
 .cache/v/cache/lastfailed
