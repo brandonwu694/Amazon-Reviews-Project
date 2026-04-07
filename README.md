@@ -109,9 +109,9 @@ To save the tuned model to a custom path:
 amazon/bin/python src/train_binary_tuned.py --save-model --model-path models/custom_binary_tuned.joblib
 ```
 
-## Run the DistilBERT Pipeline
+## Run the Binary DistilBERT Pipeline
 
-Run the DistilBERT training pipeline from the repository root:
+Run the binary DistilBERT training pipeline from the repository root:
 
 ```bash
 amazon/bin/python src/train_distil_bert.py
@@ -140,4 +140,38 @@ Training checkpoints are written to:
 
 ```text
 models/distilbert_results/
+```
+
+## Run the Ternary DistilBERT Pipeline
+
+Run the ternary DistilBERT training pipeline from the repository root:
+
+```bash
+amazon/bin/python src/train_distil_bert_ternary.py
+```
+
+This will:
+- load the BERT-ready ternary review dataset
+- split the data into training, validation, and test folds
+- tokenize review text with `distilbert-base-uncased`
+- fine-tune a DistilBERT ternary classifier
+- print validation and test metrics to the CLI
+- print classification reports and confusion matrices for validation and test folds
+
+To train the ternary model and save the final model and tokenizer:
+
+```bash
+amazon/bin/python src/train_distil_bert_ternary.py --save-model
+```
+
+By default, the saved ternary DistilBERT artifacts are written to:
+
+```text
+models/distilbert_ternary_classifier/
+```
+
+Training checkpoints are written to:
+
+```text
+models/distilbert_ternary_results/
 ```
