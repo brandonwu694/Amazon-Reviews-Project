@@ -53,6 +53,21 @@ The confusion matrix showed that neutral reviews were more often misclassified a
 
 Based on these findings, the problem was reformulated as a binary classification task, grouping 1–3 star ratings as non-positive and 4–5 star ratings as positive.
 
+### Binary Classifier Test Performance 
+
+**Note:** The binary classifier was trained and evaluated using only 1, 2, 4, and 5-star reviews. 3-star (neutral) reviews were excluded from this experiment.
+
+| Metric            | Value  |
+| ----------------- | ------ |
+| **Loss**          | 0.1247 |
+| **Accuracy**      | 0.9724 |
+| **Precision**     | 0.9549 |
+| **Recall**        | 0.9491 |
+| **F1-score**      | 0.9520 |
+| **Runtime (s)**   | 103.37 |
+| **Samples / sec** | 38.98  |
+| **Steps / sec**   | 2.44   |
+
 ### Ternary Classifier Test Performance 
 
 | Class            | Precision | Recall | F1-score | Support |
