@@ -43,6 +43,33 @@ The tuned binary logistic regression model is strong, but notebook `08_error_ana
 
 These findings make a lightweight transformer comparison defensible, especially `DistilBERT`, since the remaining errors appear to be driven more by context and phrasing than by simple keyword presence.
 
+## DistilBert Results and Shortcomings
+
+The initial iteration of the lightweight transformer performed well on reviews with clear positive or negative sentiment, but struggled with more ambiguous inputs (e.g., “X is good, but Y is bad”), often relying on surface-level cues.
+
+To improve performance on ambiguous reviews, the model was retrained on a ternary classification task: 1–2 stars as poor, 3 stars as neutral, and 4–5 stars as good. While the retrained model continued to perform well on clearly positive and negative reviews, it struggled to classify neutral reviews accurately.
+
+The confusion matrix showed that neutral reviews were more often misclassified as negative than positive, suggesting a bias toward negative predictions when handling mixed sentiment, possibly due to stronger or more noticeable negative signals in these reviews.
+
+Based on these findings, the problem was reformulated as a binary classification task, grouping 1–3 star ratings as non-positive and 4–5 star ratings as positive.
+
+### Ternary Classifier Test Performance 
+
+| Class            | Precision | Recall | F1-score | Support |
+| ---------------- | --------- | ------ | -------- | ------- |
+| 0 (Poor)         | 0.96      | 0.97   | 0.96     | 2869    |
+| 1 (Neutral)      | 0.29      | 0.21   | 0.24     | 177     |
+| 2 (Good)         | 0.91      | 0.93   | 0.92     | 1160    |
+| **Accuracy**     |           |        | **0.93** | 4206    |
+| **Macro Avg**    | 0.72      | 0.70   | 0.71     | 4206    |
+| **Weighted Avg** | 0.92      | 0.93   | 0.92     | 4206    |
+
+### Ternary Classifier Confusion Matrix
+
+[[2774   50   45]
+ [  83   37   57]
+ [  41   39 1080]]
+
 ## Run the Binary Baseline Pipeline
 
 Run the training pipeline from the repository root:
