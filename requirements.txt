@@ -1,0 +1,11 @@
+datasets
+fastapi
+joblib
+matplotlib
+numpy
+pandas
+pydantic
+pyarrow
+scikit-learn
+torch
+transformers
