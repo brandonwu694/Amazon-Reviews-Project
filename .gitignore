@@ -14,6 +14,8 @@ dst-env/
 .cache/v/cache/lastfailed
 tests/.cache/v/cache/lastfailed
 .vscode/settings.json
+.pytest_cache/
+.ruff_cache/
 
 ##
 ## R Section - See https://github.com/github/gitignore/blob/master/R.gitignore
@@ -143,6 +145,8 @@ celerybeat-schedule
 
 # dotenv
 .env
+.env.*
+!.env.example
 
 # virtualenv
 .venv

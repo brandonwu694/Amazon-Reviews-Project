@@ -9,3 +9,4 @@ pyarrow
 scikit-learn
 torch
 transformers
+uvicorn

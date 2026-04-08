@@ -223,3 +223,29 @@ Training checkpoints are written to:
 ```text
 models/distilbert_ternary_results/
 ```
+
+## Deploy on Render
+
+This repository includes a [render.yaml](/Users/brandonwu/Documents/amazon_reviews_project/render.yaml) for deploying the FastAPI app as a Render web service.
+
+The API starts with:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+To deploy on Render:
+
+1. Push this repository to GitHub.
+2. In Render, create a new Blueprint instance or Web Service from the repository.
+3. Confirm the service uses `pip install -r requirements.txt` as the build command.
+4. Confirm the start command is `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
+
+The configured health check endpoint is:
+
+```text
+/health
+```
+
+Important deployment note:
+- The binary DistilBERT model files under `models/distilbert_binary_classifier/` must remain in the repository, since the API loads them from local disk at startup.
