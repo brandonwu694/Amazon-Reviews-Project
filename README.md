@@ -87,6 +87,10 @@ Based on these findings, the problem was reformulated as a binary classification
 | **1 (Neutral)**    | 83       | 37          | 57       |
 | **2 (Good)**       | 41       | 39          | 1080     |
 
+## Model Shortcomings and Future Steps
+
+Both variations of the trained `DistilBert` models performed well when tested on both the validation and testing sets. However, when the model was tasked to classify unseen, more ambiguous reviews, it often misclassified them with high confidence. To make the model more generalizable to unseen data, it can be trained on a larger volume of data, with a more balanced distribution of ratings. Furthermore, converting the problem from 5-class classification into a binary classification problem may have unintentionally made it harder for the model to understand milder sentiments in reviews. Ultimately, training the model on a larger and more diverse dataset and reformulating the problem to better model neutral reviews are the two highest impact changes to improve the model's performance. 
+
 ## Run the Binary Baseline Pipeline
 
 Run the training pipeline from the repository root:
